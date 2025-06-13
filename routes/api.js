@@ -22,6 +22,12 @@ module.exports = function (app) {
 
       // 2 stocks
       if (Array.isArray(symbol)) {
+        // Handle like query
+        if (req.query.like) {
+          const userIP = req.ip;
+          for (let i = 0; i < symbol.length; i++) await likesHandler(symbol[i], userIP);
+        }
+        //return stock info
         let diff = (chest[symbol[0]] ? chest[symbol[0]].count : 0) - (chest[symbol[1]] ? chest[symbol[1]].count : 0);
         const stock_table = [];
         for (let i = 0; i < symbol.length; i++) {
@@ -51,3 +57,4 @@ module.exports = function (app) {
   });
 
 };
+
