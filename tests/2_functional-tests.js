@@ -51,7 +51,7 @@ suite('Functional Tests', function() {
         });
     });
 
-    test('GET request for 2 stocks', function(done) {
+    test('GET request for 2 stocks and like', function(done) {
         chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG', stock: 'MSFT', like: true }).end(function(err, res) {
             console.log('fifth test');
             chai.expect(res).to.have.status(200);
