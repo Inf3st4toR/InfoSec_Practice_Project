@@ -1,4 +1,5 @@
 'use strict';
+const fetch = require('node-fetch');
 const bcrypt = require('bcrypt'); // Salt=4
 
 const chest = {};
@@ -17,9 +18,9 @@ module.exports = function (app) {
 
   app.route('/api/stock-prices').get(async (req, res) => {
     try {
-      console.log('Route hit:', req.query);
+      console.log(req.query);
       const symbol = req.query.stock;
-
+      
       // 2 stocks
       if (Array.isArray(symbol)) {
         // Handle like query
@@ -52,9 +53,9 @@ module.exports = function (app) {
         res.json({"stockData":{"stock": data.symbol, "price": data.latestPrice ,"likes": chest[symbol] ? chest[symbol].count : 0 }});
       }
     } catch (err) {
+      console.error('Server error:', err);
       res.status(500).json({ error: 'Server error' });
     }
   });
 
 };
-
