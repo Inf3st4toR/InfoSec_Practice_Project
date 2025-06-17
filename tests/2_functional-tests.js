@@ -9,7 +9,6 @@ chai.use(chaiHttp);
 suite('Functional Tests', function() {
     test('GET request to view one stock', function(done) {
         chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG' }).end(function(err, res) {
-            console.log('first test');
             chai.expect(res).to.have.status(200);
             chai.expect(res.body).to.have.property('stockData');
             chai.expect(res.body.stockData).to.have.property('stock');
@@ -24,7 +23,6 @@ suite('Functional Tests', function() {
 
     test('GET request and like', function(done) {
         chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG', like: true }).end(function(err, res) {
-            console.log('second test');
             chai.expect(res).to.have.status(200);
             chai.expect(res.body.stockData.likes).to.be.a('number');
             chai.expect(res.body.stockData.likes).to.equal(1);
@@ -34,7 +32,6 @@ suite('Functional Tests', function() {
 
     test('GET request and like same IP', function(done) {
         chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG', like: true }).end(function(err, res) {
-            console.log('third test');
             chai.expect(res).to.have.status(200);
             chai.expect(res.body.stockData.likes).to.be.a('number');
             chai.expect(res.body.stockData.likes).to.equal(1);
@@ -43,8 +40,7 @@ suite('Functional Tests', function() {
     });
 
     test('GET request for 2 stocks', function(done) {
-        chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG', stock: 'MSFT' }).end(function(err, res) {
-            console.log('fourth test');
+        chai.request(server).get('/api/stock-prices/').query({ stock: ['GOOG', 'MSFT'] }).end(function(err, res) {
             chai.expect(res).to.have.status(200);
             chai.expect(res.body.stockData).to.be.a('array');
             done();
@@ -52,12 +48,12 @@ suite('Functional Tests', function() {
     });
 
     test('GET request for 2 stocks and like', function(done) {
-        chai.request(server).get('/api/stock-prices/').query({ stock: 'GOOG', stock: 'MSFT', like: true }).end(function(err, res) {
-            console.log('fifth test');
+        chai.request(server).get('/api/stock-prices/').query({ stock: ['GOOG', 'MSFT'], like: true }).end(function(err, res) {
             chai.expect(res).to.have.status(200);
             chai.expect(res.body.stockData).to.be.a('array');
-            chai.expect(res.body.stockData[0].likes + res.body.stockData[1].likes).to.equal(0);
+            chai.expect(res.body.stockData[0].rel_likes + res.body.stockData[1].rel_likes).to.equal(0);
             done();
         });
     });
 });
+
